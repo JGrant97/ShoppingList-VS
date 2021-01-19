@@ -68,6 +68,9 @@
         //Button logic
         $("#left").on("click", function () {
             if (selected != null) {
+
+                var duplicateFound;
+
                 //Changes the index of the selcted item based on largest index in the current list
                 if (currentList.length == 0) {
                     selected.Index = 1;
@@ -80,31 +83,31 @@
                         else {
                             selected.Index = currentList[i].Index + 1;
                         }
-
+                        if (selected.Name.toLowerCase() === currentList[i].Name.toLowerCase()) {
+                            duplicateFound = true;
+                        }
                     }
                 }
 
-                //Add item to current list and remove lists from HTML
-                currentList.push(selected);
-                previous.children().remove();
-                current.children().remove();
+                if (duplicateFound == true) {
+                    alert("Can not add a duplicate items to the current list.");
+                } else {
+                    //Add item to current list and remove lists from HTML
+                    currentList.push(selected);
+                    previous.children().remove();
+                    current.children().remove();
 
-                //Remove item from previous list and and rerender both
-                var index = previousList.indexOf(selected);
-                previousList.splice(index, 1);
+                    //Remove item from previous list and and rerender both
+                    var index = previousList.indexOf(selected);
+                    previousList.splice(index, 1);
 
-                renderPreviousList();
-                renderCurrentList();
-                console.log(currentList);
-                console.log(previousList);
-                console.log("test");
+                    renderPreviousList();
+                    renderCurrentList();
+                }
             }
 
             else if (selected == null) {
                 alert("Please select an item.");
-            }
-            else if (listSelected == current.attr("id")) {
-                alert("Item is already added to the list");
             }
             selected = null;
         });
@@ -112,10 +115,13 @@
         $("#right").on("click", function () {
             if (selected != null) {
 
+                var duplicateFound = false;
+
                 //Changes the index of the selcted item based on largest index in the current list
                 if (previousList.length == 0) {
                     selected.Index = 1;
-                } else {
+                }
+                else {
                     for (var i = 0; i < previousList.length; i++) {
 
                         if (previousList[i].Index < selected.Index) {
@@ -125,25 +131,34 @@
                             selected.Index = previousList[i].Index + 1;
                         }
 
+                        if (selected.Name.toLowerCase() == previousList[i].Name.toLowerCase()) {
+                            duplicateFound = true;
+                        }
                     }
                 }
 
+                if (duplicateFound == true) {
+                    alert("Can not add duplicate items to the previous list.");
+                }
+                else {
+                    //Add item to previous list and remove lists from HTML
+                    previousList.push(selected);
+                    previous.children().remove();
+                    current.children().remove();
 
-                //Add item to previous list and remove lists from HTML
-                previousList.push(selected);
-                previous.children().remove();
-                current.children().remove();
+                    //Remove item from current list and and rerender both
+                    var index = currentList.indexOf(selected);
+                    currentList.splice(index, 1);
 
-                //Remove item from current list and and rerender both
-                var index = currentList.indexOf(selected);
-                currentList.splice(index, 1);
-                renderPreviousList();
-                renderCurrentList();
-                console.log(currentList);
-                console.log(previousList);
+                    renderPreviousList();
+                    renderCurrentList();
 
+                }
+
+                console.log(duplicateFound);
             }
-            else {
+
+            else if (selected = nu) {
                 alert("Please select an item")
             }
             selected = null;
@@ -216,7 +231,7 @@
 
 
         $("#down").on("click", function () {
-
+             
             if (selected != null) {
 
                 if (listSelected == previous.attr("id")) {
@@ -248,8 +263,6 @@
                     }
 
                     renderCurrentList();
-                    console.log(currentList);
-                    console.log(previousList);
 
                 }
                 else if (selected.Index <= largestCurIndex && listSelected == current.attr("id")) {
@@ -308,10 +321,6 @@
                         }
                     }
 
-     
-                    console.log(previousList);
-                    console.log(currentList);
-
                     $("#ItemModal").modal("toggle");
                 });
             }
@@ -335,110 +344,122 @@
                 var largestPrevId;
                 var largestCurId
 
+                var duplicateFound;
+
                 //Check is the new item has a new
                 if (NewName.trim().length > 0) {
 
-                    //If the current list is empty and the previous list is not then the new items Id will equal one more than the largest Id in the previous list
-                    if (currentList.length == 0 && previousList.length > 0) {
-                        for (var i = 0; i < previousList.length; i++) {
-                            largestPrevId = previousList[i].Id;
-                            NewId = previousList[i].Id + 1;
+                    //Validates that the new item name does not already exist
+                    for (var i = 0; i < currentList.length; i++) {
+                        if (NewName.toLowerCase() === currentList[i].Name.toLowerCase()) {
+                            duplicateFound = true;
+                        }
+
+                    }
+
+                    console.log(duplicateFound);
+                    if (duplicateFound == true) {
+                        alert("Can not add an item which already exists in the current list.");
+                    }
+                    else {
+
+                        //If the current list is empty and the previous list is not then the new items Id will equal one more than the largest Id in the previous list
+                        if (currentList.length == 0 && previousList.length > 0) {
+                            for (var i = 0; i < previousList.length; i++) {
+                                largestPrevId = previousList[i].Id;
+                                NewId = previousList[i].Id + 1;
+                                NewIndex = 1;
+
+
+                            }
+                        }
+
+                        if (currentList.length > previousList.length) {
+                            for (var i = 0; i < currentList.length; i++) {
+                                largestCurId = currentList[i].Id;
+
+
+                                if (NewId < largestPrevId) {
+                                    NewId = largestPrevId + 1
+                                }
+                                else if (NewId < largestCurId) {
+                                    NewId = largestCurId + 1
+                                }
+                                else if (NewId < currentList[i].Id) {
+                                    NewId = currentList[i].Id + 1;
+                                } else {
+                                    NewId = NewId + 1;
+                                }
+
+                                if (currentList[i].Index < NewId) {
+                                    NewIndex = currentList[i].Index + 1;
+                                }
+
+
+                            }
+                        }
+
+                        if (previousList.length == 0) {
+
+                            for (var i = 0; i < currentList.length; i++) {
+
+                                if (NewId > currentList[i].Id) {
+                                    NewId = largestCurId + 1;
+                                } else {
+                                    largestCurId = currentList[i].Id;
+                                }
+
+                            }
+                        }
+
+                        //If the current list is not empty then the previous list is checked.
+                        //If the largest current item Id is larger than any in the previous list the new items Id will auto increment from the current list Id's instead
+                        else if (currentList.length > 0) {
+
+                            for (var i = 0; i < previousList.length; i++) {
+                                largestPrevId = previousList[i].Id;
+                            }
+
+                            for (var i = 0; i < currentList.length; i++) {
+                                largestCurId = currentList[i].Id;
+
+                                if (largestCurId > largestPrevId) {
+                                    if (currentList[i].Id < currentList) {
+                                        NewId = currentList + 1;
+                                    }
+                                    else {
+                                        NewId = currentList[i].Id + 1;
+                                    }
+                                }
+                                else {
+                                    if (currentList[i].Id < largestPrevId) {
+                                        NewId = largestPrevId + 1;
+                                    }
+                                    else {
+                                        NewId = currentList[i].Id + 1;
+                                    }
+                                }
+
+                                //Auto increments the index
+                                if (currentList[i].Index < NewId) {
+                                    NewIndex = currentList[i].Index + 1;
+                                }
+                            }
+                        }
+
+                        //If both lists are empty the starting Id will be 1
+                        else if (currentList.length == 0 && previousList.length == 0) {
+                            NewId = 1;
                             NewIndex = 1;
                         }
+                        var newItem = {};
+                        newItem["Id"] = NewId;
+                        newItem["Name"] = NewName;
+                        newItem["Index"] = NewIndex;
+                        newItem["HighPriority"] = NewHighPriority;
+
+                        currentList.push(newItem);
                     }
-
-                    if (currentList.length > previousList.length) {
-                        for (var i = 0; i < currentList.length; i++) {
-                            largestCurId = currentList[i].Id;
-
-
-                            if (NewId < largestPrevId) {
-                                NewId = largestPrevId + 1
-                            }
-                            else if (NewId < largestCurId) {
-                                NewId = largestCurId + 1
-                            }
-                            else if (NewId < currentList[i].Id) {
-                                NewId = currentList[i].Id + 1;
-                            } else {
-                                NewId = NewId + 1;
-                            }
-
-                            if (currentList[i].Index < NewId) {
-                                NewIndex = currentList[i].Index + 1;
-                            }
-                        //    if (NewIndex < currentList[i].Index) {
-                        //        NewIndex = currentList[i].Index + 1;
-                        //    }
-                        //    else if (NewIndex > currentList[i].Index) {
-                        //        NewIndex = NewIndex + 1;
-                        //    }
-                        }
-                    }
-
-                    if (previousList.length == 0) {
-
-                        for (var i = 0; i < currentList.length; i++) {
-
-                            if (NewId > currentList[i].Id) {
-                                NewId = largestCurId + 1;
-                            } else {
-                                largestCurId = currentList[i].Id;
-                            }
-
-                        }
-                    }
-
-                    //If the current list is not empty then the previous list is checked.
-                    //If the largest current item Id is larger than any in the previous list the new items Id will auto increment from the current list Id's instead
-                    else if (currentList.length > 0) {
-
-                        for (var i = 0; i < previousList.length; i++) {
-                            largestPrevId = previousList[i].Id;
-                        }
-
-                        for (var i = 0; i < currentList.length; i++) {
-                            largestCurId = currentList[i].Id;
-
-                            if (largestCurId > largestPrevId) {
-                                if (currentList[i].Id < currentList) {
-                                    NewId = currentList + 1;
-                                }
-                                else {
-                                    NewId = currentList[i].Id + 1;
-                                }
-                            }
-                            else {
-                                if (currentList[i].Id < largestPrevId) {
-                                    NewId = largestPrevId + 1;
-                                }
-                                else {
-                                    NewId = currentList[i].Id + 1;
-                                }
-                            }
-
-                            //Auto increments the index
-                            if (currentList[i].Index < NewId) {
-                                NewIndex = currentList[i].Index + 1;
-                            }
-                        }
-                    }
-
-                    //If both lists are empty the starting Id will be 1
-                    else if (currentList.length == 0 && previousList.length == 0) {
-                        NewId = 1;
-                        NewIndex = 1;
-                    }
-
-                    //NewIndex = NewId;
-
-                    var newItem = {};
-                    newItem["Id"] = NewId;
-                    newItem["Name"] = NewName;
-                    newItem["Index"] = NewIndex;
-                    newItem["HighPriority"] = NewHighPriority;
-
-                    currentList.push(newItem);
                 }
                 else {
                     alert("Please enter item details.");
