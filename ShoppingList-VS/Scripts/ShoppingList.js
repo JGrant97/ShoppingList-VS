@@ -95,8 +95,9 @@
 
                 renderPreviousList();
                 renderCurrentList();
-                console.log(currentList "test");
-               console.log(previousList);
+                console.log(currentList);
+                console.log(previousList);
+                console.log("test");
             }
 
             else if (selected == null) {
