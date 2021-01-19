@@ -191,11 +191,11 @@
                         if (currentList[i].Id == selected.Id) {
                             currentList[i].Index = selected.Index - 1;
                         }
-
-                        //Changes the item index of the item above the selcted item to the selected items index
-                        else if (currentList[i].Index == selected.Index - 1) {
+                        else if (currentList[i].Index + 1 == selected.Index) {
                             currentList[i].Index = selected.Index;
                         }
+    
+            
                     }
 
                     renderCurrentList();
@@ -210,6 +210,7 @@
             else {
                 alert("Please select an item sort.");
             }
+
         });
 
 
