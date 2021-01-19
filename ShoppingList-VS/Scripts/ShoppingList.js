@@ -7,7 +7,7 @@
 
         var id;
         var selected;
-        var listSelected;
+        var listSelected
         var currentList = data.CurrentList.Items;
         var previousList = data.PreviousList.Items;
 
@@ -68,7 +68,6 @@
         //Button logic
         $("#left").on("click", function () {
             if (selected != null) {
-
                 //Changes the index of the selcted item based on largest index in the current list
                 if (currentList.length == 0) {
                     selected.Index = 1;
@@ -85,8 +84,6 @@
                     }
                 }
 
-   
-
                 //Add item to current list and remove lists from HTML
                 currentList.push(selected);
                 previous.children().remove();
@@ -99,11 +96,14 @@
                 renderPreviousList();
                 renderCurrentList();
                 console.log(currentList);
-                console.log(previousList);
+               console.log(previousList);
             }
 
-            else {
+            else if (selected == null) {
                 alert("Please select an item.");
+            }
+            else if (listSelected == current.attr("id")) {
+                alert("Item is already added to the list");
             }
             selected = null;
         });
