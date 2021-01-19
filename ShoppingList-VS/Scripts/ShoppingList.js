@@ -95,7 +95,7 @@
 
                 renderPreviousList();
                 renderCurrentList();
-                console.log(currentList);
+                console.log(currentList "test");
                console.log(previousList);
             }
 
