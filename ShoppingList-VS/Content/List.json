@@ -1,0 +1,53 @@
+{
+  "PreviousList": {
+    "Id": 0,
+    "Items": [
+      {
+        "Id": 1,
+        "Name": "Bananas",
+        "Index": 1,
+        "HighPriority": false
+      },
+      {
+        "Id": 2,
+        "Name": "Biscuits",
+        "Index": 2,
+        "HighPriority": false
+      },
+      {
+        "Id": 3,
+        "Name": "Bread",
+        "Index": 3,
+        "HighPriority": false
+      },
+      {
+        "Id": 4,
+        "Name": "Cereal",
+        "Index": 4,
+        "HighPriority": false
+      },
+      {
+        "Id": 5,
+        "Name": "Milk",
+        "Index": 5,
+        "HighPriority": false
+      },
+      {
+        "Id": 6,
+        "Name": "Sugar",
+        "Index": 6,
+        "HighPriority": false
+      },
+      {
+        "Id": 7,
+        "Name": "Tea Bags",
+        "Index": 7,
+        "HighPriority": false
+      }
+    ]
+  },
+  "CurrentList": {
+    "Id": 0,
+    "Items": []
+  }
+}

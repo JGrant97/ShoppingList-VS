@@ -1,0 +1,142 @@
+﻿@model ShoppingList_VS.ViewModels.IndexViewModel
+@{
+    ViewBag.Title = "Shopping List";
+}
+
+<!--Lists and item buttons-->
+<div class="row">
+    <!--Current List-->
+    <div class="col-4 list-col">
+        <h3 class="title">Current</h3>
+        <select id="current" class="item-list" size="20">
+        </select>
+    </div>
+
+    <div class="col-4" id="arrows">
+        <div class="row">
+            <button id="left" class="btn btn-light arrow-button"><</button>
+        </div>
+        <div class="row">
+            <button id="right" class="btn btn-light arrow-button">></button>
+        </div>
+        <div class="spacer">
+            <div class="row">
+                <button id="up" class="btn btn-light arrow-button">∧</button>
+            </div>
+            <div class="row">
+                <button id="down" class="btn btn-light arrow-button">∨</button>
+            </div>
+        </div>
+    </div>
+
+    <!--Previous List-->
+    <div class="col-4 list-col">
+        <h3 class="title">Previous</h3>
+        <select id="previous" class="item-list" size="20">
+        </select>
+    </div>
+</div>
+
+<!--Bottoms Buttons-->
+<div id="bottom-buttons">
+    <div class="row list-buttons">
+        <div class="col">
+            <button id="save" class="btn btn-light">Save List</button>
+            <button id="clear" class="btn btn-light">Clear List</button>
+            <button id="load" class="btn btn-light">Load List</button>
+        </div>
+    </div>
+    <div class="row item-button">
+        <div class="col">
+            <!--<button type="button" class="btn btn-light" data-toggle="modal" data-target="#ItemModal">Add Item</button>-->
+            <button type="button" id="addButton" class="btn btn-light">Add Item</button>
+            <button type="button" id="editButton" class="btn btn-light">Edit Item</button>
+            <button type="button" id="deleteButton" class="btn btn-light">Delete Item</button>
+        </div>
+    </div>
+</div>
+
+
+
+<!--Bootstrap4 Modal Edit Item Modal-->
+<div class="modal fade" id="ItemModal" tabindex="-1" role="dialog" aria-labelledby="ItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ItemModalLabel">Edit item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="ItemForm" role="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="item-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="item-name">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="highPriority">
+                        <label class="form-check-label" for="highPriority">High priority</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" id="submit" onclick="this.disabled" class="btn btn-primary">Edit Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Bootstrap4 Modal Add Item Modal-->
+<div class="modal fade" id="AddItemModal" tabindex="-1" role="dialog" aria-labelledby="AddItemModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="AddItemModalLabel">Add item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="AddItemForm" role="form">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="Additem-name" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="Additem-name">
+                    </div>
+                    <div class="form-check">
+                        <input type="checkbox" class="form-check-input" id="AddhighPriority">
+                        <label class="form-check-label" for="AddhighPriority">High priority</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="submit" id="Addsubmit" onclick="this.disabled" class="btn btn-primary">Add Item</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--Bootstrap4 Modal Confim delete-->
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="DeleteModalLabel">Delete item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>This item will be permanently deleted.</p>
+
+                <p>Are you sure you want to delete this item?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" id="confirmDelete" class="btn btn-primary">Delete item</button>
+            </div>
+        </div>
+    </div>
+</div>
