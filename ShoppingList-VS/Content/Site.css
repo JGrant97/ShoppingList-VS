@@ -67,8 +67,9 @@ textarea {
     margin-left: 50px;
 }
 
-.redText {
+.redText:before {
     color: red;
+    content: "!";
 }
 
 

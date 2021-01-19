@@ -19,7 +19,6 @@
                 });
 
                 previous.append("<option class='prevItem' id='" + previousList[i].Id + "' value='" + previousList[i].Id + "'>" + previousList[i].Name + "</option>");
-
             }
         }
 
@@ -30,12 +29,16 @@
                     return a.Index - b.Index;
                 });
 
-                current.append("<option class='curItem' id='" + currentList[i].Id + "' value='" + currentList[i].Id + "'>" + currentList[i].Name + "</option>");
-
+                if (currentList[i].HighPriority === true) {
+                    current.append("<option class='curItem redText' id='" + currentList[i].Id + "' value='" + currentList[i].Id + "'>" + currentList[i].Name + "</option>");
+                }
+                else {
+                    current.append("<option class='curItem' id='" + currentList[i].Id + "' value='" + currentList[i].Id + "'>" + currentList[i].Name + "</option>");
+                }
             }
         }
 
-         //If the lists are already populated on page start then the items will be displayed. if not they won't.
+        //pre-populated lists will be rendered on page start
         if (previousList != null) {
             renderPreviousList();
         }
@@ -57,6 +60,7 @@
             $("#deleteButton").prop("disabled", true);
         });
 
+        //Stores which list is clicked on
         $(previous).on("click", function () {
             listSelected = $(this).attr("id");
         });
@@ -72,6 +76,7 @@
                 var duplicateFound;
 
                 //Changes the index of the selcted item based on largest index in the current list
+                //Also detects any duplicates and stops the user from adding a duplicate item to a list.
                 if (currentList.length == 0) {
                     selected.Index = 1;
                 } else {
@@ -118,6 +123,7 @@
                 var duplicateFound = false;
 
                 //Changes the index of the selcted item based on largest index in the current list
+                //Also detects any duplicates and stops the user from adding a duplicate item to a list.
                 if (previousList.length == 0) {
                     selected.Index = 1;
                 }
@@ -152,10 +158,7 @@
 
                     renderPreviousList();
                     renderCurrentList();
-
                 }
-
-                console.log(duplicateFound);
             }
 
             else if (selected = nu) {
@@ -168,7 +171,7 @@
 
             if (selected != null) {
 
-                //Ability to re order previous list works but is not part of the spec, uncomment if you wish to implement.
+                //Ability to re-order previous list works but is not part of the spec, uncomment if you wish to implement.
 
                 //if (listSelected == previous.attr("id") && selected.Index > 1) {
                 //    previous.children().remove();
@@ -196,8 +199,6 @@
                     alert("Can not re-order previous list.");
                 }
 
-
-
                 if (listSelected == current.attr("id") && selected.Index > 1) {
                     current.children().remove();
 
@@ -210,14 +211,9 @@
                         else if (currentList[i].Index + 1 == selected.Index) {
                             currentList[i].Index = selected.Index;
                         }
-    
-            
                     }
 
                     renderCurrentList();
-                    console.log(currentList);
-                    console.log(previousList);
-
                 }
                 else if (selected.Index <= 1 && listSelected == current.attr("id")) {
                     alert("Item is already at the top of the list.");
@@ -226,7 +222,6 @@
             else {
                 alert("Please select an item sort.");
             }
-
         });
 
 
@@ -245,7 +240,6 @@
                         largestCurIndex = currentList[i].Index;
                     }
                 }
-                console.log(largestCurIndex);
 
                 if (listSelected == current.attr("id") && selected.Index < largestCurIndex) {
                     current.children().remove();
@@ -274,6 +268,31 @@
             }
         });
 
+        //Clears current list
+        $("#clear").on("click", function (event) {
+            currentList.length = 0;
+            current.children().remove();
+            renderCurrentList();
+        });
+
+        //Saves current list to local storage
+        //Viewed https://stackoverflow.com/questions/3357553/how-do-i-store-an-array-in-localstorage for help
+        $("#save").on("click", function (event) {
+            if (currentList.length == 0) {
+                alert("Can not save an empty list.");
+            } else {
+                localStorage.setItem("savedList", JSON.stringify(currentList));
+                console.log(JSON.parse(localStorage.getItem("savedList")));
+            }
+
+        });
+
+        //Populates previous list with the saved list
+        $("#load").on("click", function (event) {
+            previousList = JSON.parse(localStorage.getItem("savedList"));
+            previous.children().remove();
+            renderPreviousList();
+        });
 
         $("#deleteButton").on("click", function (event) {
 
@@ -287,7 +306,6 @@
                     previous.children("#" + selected.Id + "").remove();
                     $("#DeleteModal").modal("toggle");
                 });
-
             }
             else {
                 alert("Please select an item to delete.");
@@ -343,7 +361,6 @@
                 var NewId = 0;
                 var largestPrevId;
                 var largestCurId
-
                 var duplicateFound;
 
                 //Check is the new item has a new
@@ -357,7 +374,6 @@
 
                     }
 
-                    console.log(duplicateFound);
                     if (duplicateFound == true) {
                         alert("Can not add an item which already exists in the current list.");
                     }
@@ -374,6 +390,7 @@
                             }
                         }
 
+                        //When the current list is longer than the previous list the new Id's will auto increment for there
                         if (currentList.length > previousList.length) {
                             for (var i = 0; i < currentList.length; i++) {
                                 largestCurId = currentList[i].Id;
@@ -387,14 +404,11 @@
                                 }
                                 else if (NewId < currentList[i].Id) {
                                     NewId = currentList[i].Id + 1;
-                                } else {
-                                    NewId = NewId + 1;
-                                }
+                                } 
 
                                 if (currentList[i].Index < NewId) {
                                     NewIndex = currentList[i].Index + 1;
                                 }
-
 
                             }
                         }
@@ -452,6 +466,7 @@
                             NewId = 1;
                             NewIndex = 1;
                         }
+
                         var newItem = {};
                         newItem["Id"] = NewId;
                         newItem["Name"] = NewName;
