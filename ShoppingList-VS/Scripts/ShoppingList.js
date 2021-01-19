@@ -161,8 +161,8 @@
                 }
             }
 
-            else if (selected = nu) {
-                alert("Please select an item")
+            else if (selected = null) {
+                alert("Please select an item");
             }
             selected = null;
         });

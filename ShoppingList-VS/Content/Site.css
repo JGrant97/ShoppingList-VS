@@ -1,6 +1,5 @@
 ﻿body {
-    padding-top: 10%;
-    padding-bottom: 20px;
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -75,4 +74,16 @@ textarea {
 
 .content{
     justify-content:center;
+    padding-top: 50px;
+}
+
+.prevItem,
+.curItem{
+    height: 25px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+.navbar {
+    background-color: #343434 !important;
 }
